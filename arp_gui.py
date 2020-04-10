@@ -113,3 +113,23 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "NAME"))
         self.scan_btn.setText(_translate("MainWindow", "SCAN NETWORK"))
         self.find_network_btn.setText(_translate("MainWindow", "FIND NEW NETWORKS"))
+
+    @staticmethod
+    def print_message(title, text):
+        msg = QtWidgets.QMessageBox()
+        msg.setStyleSheet("QLabel{min-width: 150px; min-height:100px; font-size:18px; }")
+
+        msg.setText(text)
+        msg.setWindowTitle(title)
+        msg.setStandardButtons(QtWidgets.QMessageBox().Ok)
+
+        msg.exec_()
+
+    def add_table_item(self, ip, mac, name):
+        table = self.table
+        table.setRowCount(table.rowCount() + 1)
+
+        row = table.rowCount()
+        table.setItem(table.rowCount() - 1, 0, QtWidgets.QTableWidgetItem(ip))
+        table.setItem(table.rowCount() - 1, 1, QtWidgets.QTableWidgetItem(mac))
+        table.setItem(table.rowCount() - 1, 2, QtWidgets.QTableWidgetItem(name))
