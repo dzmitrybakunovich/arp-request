@@ -24,6 +24,10 @@ class NetworkInterface(object):
         for adapter in adapters:
             if 2 in netifaces.ifaddresses(adapter.name) and adapter.ips[0].nice_name != 'lo':
                 ui.interface_box.addItem(adapter.ips[0].nice_name)
+        ui.print_message(
+            'NETWORK',
+            'NETWORKS FOUND',
+        )
         return ui.interface_box.setCurrentIndex(0)
 
     @staticmethod
@@ -54,23 +58,29 @@ class ArpRequest(object):
         )
 
         # Bind interface
-        self.socket.bind(
-            (
-                ui.interface_box.currentText(),
-                socket.SOCK_RAW,
+        if ui.interface_box.currentText() == 'CHOOSE A NETWORK...':
+            arp_gui.Ui_MainWindow.print_message(
+                'ERROR',
+                'YOU DO NOT SELECT A NETWORK!',
             )
-        )
+
+        else:
+            self.socket.bind(
+                (
+                    ui.interface_box.currentText(),
+                    socket.SOCK_RAW,
+                )
+            )
 
         self.my_ip = ui.ip_line.text()
 
     def request(self):
         if ui.interface_box.currentText() == 'CHOOSE A NETWORK...':
-            return arp_gui.Ui_MainWindow.print_message(
-                'ERROR',
-                'YOU DO NOT SELECT A NETWORK',
-            )
+            return None
 
         else:
+            ui.table.setRowCount(0)
+
             working_ip = self.find_working_ip()
             for ip in working_ip:
                 for _ in range(10):
@@ -88,6 +98,11 @@ class ArpRequest(object):
                     mac,
                     socket.gethostbyaddr(ip)[0],
                 )
+
+            ui.print_message(
+                'NETWORK',
+                'NETWORKS SCANNED',
+            )
 
     def send_request(self, ip_destination):
 

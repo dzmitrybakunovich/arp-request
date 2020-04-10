@@ -16,6 +16,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(1000, 624)
         MainWindow.setMinimumSize(1000, 630)
         MainWindow.setMaximumSize(1920, 1080)
+        MainWindow.move(450, 200)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -100,7 +101,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "NETWORK SCAN"))
+        MainWindow.setWindowIcon(QtGui.QIcon('images/icon.png'))
         self.ip_label.setText(_translate("MainWindow", "IP"))
         self.mask_label.setText(_translate("MainWindow", "MASK"))
         self.interface_box.setItemText(0, _translate("MainWindow", "CHOOSE A NETWORK..."))
@@ -117,11 +119,13 @@ class Ui_MainWindow(object):
     @staticmethod
     def print_message(title, text):
         msg = QtWidgets.QMessageBox()
-        msg.setStyleSheet("QLabel{min-width: 150px; min-height:100px; font-size:18px; }")
+        msg.setStyleSheet("QLabel{font-size:13px; }")
 
         msg.setText(text)
         msg.setWindowTitle(title)
-        msg.setStandardButtons(QtWidgets.QMessageBox().Ok)
+        msg.setStandardButtons(
+            QtWidgets.QMessageBox().Ok | QtWidgets.QMessageBox().Cancel
+        )
 
         msg.exec_()
 
@@ -129,7 +133,6 @@ class Ui_MainWindow(object):
         table = self.table
         table.setRowCount(table.rowCount() + 1)
 
-        row = table.rowCount()
         table.setItem(table.rowCount() - 1, 0, QtWidgets.QTableWidgetItem(ip))
         table.setItem(table.rowCount() - 1, 1, QtWidgets.QTableWidgetItem(mac))
         table.setItem(table.rowCount() - 1, 2, QtWidgets.QTableWidgetItem(name))
